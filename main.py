@@ -19,9 +19,15 @@ def draw_base(surface, start, base_height, base_width):
     color, rect = calc_base(start, base_height, base_width, (255, 255, 255))
     pygame.draw.rect(surface, color, rect)
 
-
-def draw_top(surface, start, num_segments, seg_wt, seg_wb, seg_height, seg_scale):
-    pass
+def draw_top(surface, start, num_segments, seg_wt, seg_wb, seg_height, seg_scale, base_height, base_width):
+    start = (start[0], start[1])
+    x = start[0] - seg_wt/2
+    y = start[1] - base_height - seg_height
+    trapezoid = (x, y), \
+                (seg_wt + x, y), \
+                ((seg_wb - seg_wt) / 2 + seg_wt + x , seg_height + y), \
+                (x - ((seg_wb - seg_wt) / 2), seg_height + y)
+    pygame.draw.polygon(surface, (255, 255, 255), trapezoid, 3)
 
 
 def draw_tree(surface: pygame.Surface, start: (int, int), base_height: int, base_width: int, num_segments: int,
@@ -40,7 +46,7 @@ def draw_tree(surface: pygame.Surface, start: (int, int), base_height: int, base
     """
 
     draw_base(surface, start, base_height, base_width)
-    draw_top(surface, start, num_segments, seg_wt, seg_wb, seg_height, seg_scale)
+    draw_top(surface, start, num_segments, seg_wt, seg_wb, seg_height, seg_scale, base_height, base_width)
 
 
 def main(screen, width, height):
@@ -59,5 +65,8 @@ def main(screen, width, height):
         pygame.display.flip()
 
 
+      draw_tree(screen, (int(width/2), int(height/2)), 100, 30, 0 , 80, 220, 50, 0)
+      pygame.display.flip()
+    
 if __name__ == '__main__':
     main(screen, width, height)
